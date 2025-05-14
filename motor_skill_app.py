@@ -4,6 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from scipy.stats import ttest_ind
 
+
 # Load data
 url = 'https://raw.githubusercontent.com/VikramArunkumarSJSU/MotorSkillResponseTimeData/refs/heads/main/Controlled_EDK_Dataset2.csv'
 df = pd.read_csv(url)
@@ -11,6 +12,8 @@ df.rename(columns={'RT': 'Button_Release_Time'}, inplace=True)
 df['Total_Time'] = df['Button_Release_Time'] + df['Total_MT']
 
 st.title("🤾‍♀️ Welcome to MotorSkillBot!")
+st.image("https://raw.githubusercontent.com/maxxx129/motor-skillbot/main/MotorSkillBot.jpg", caption="Welcome to MotorSkillBot 🤖")
+st.title("MotorSkillBot")
 st.markdown("Let's analyze some motor skills response time data! 💪🧠")
 
 # Main menu
@@ -23,7 +26,23 @@ option = st.sidebar.selectbox("Pick an option:", [
 
 if option == "Left Hand or Right Hand?":
     st.subheader("🖐️ Left vs Right")
-    st.info("🚧 This feature is under construction! But it's coming soon.")
+    st.markdown("Are you A. Left handed, B. Right handed, C. Both?")
+    hand_motor = st.text_input("Please type in your answer here (A/B/C):").strip().upper()
+
+    if hand_motor == 'A':
+        st.write("\n Fun Fact: 10% - 15% of the population is left handed")
+        st.image("https://raw.githubusercontent.com/maxxx129/motor-skillbot/main/Left.jpeg")
+
+    elif hand_motor == 'B':
+        st.write("\n Fun Fact: 85% - 90% of the population is right handed")
+        st.image("https://raw.githubusercontent.com/maxxx129/motor-skillbot/main/Right.jpeg")
+            
+
+    elif hand_motor == 'C':
+        st.write("\n Fun Fact: 1% of the population is ambidextrous, & can use both left and right handed")
+        st.image("https://raw.githubusercontent.com/maxxx129/motor-skillbot/main/Both_handed.jpeg")
+    elif hand_motor:
+        st.write("Please select options A, B, or C")
 
 elif option == "About the Motor Skills Response study":
     st.subheader("📚 About the Study")
@@ -32,6 +51,24 @@ elif option == "About the Motor Skills Response study":
     Participants used both hands to interact with objects A, B, C, and D.
     We're analyzing their performance through various metrics. 🧪
     """)
+    motor_impairement = st.selectbox("Do you have any motor skills impairment or difficulties?", ['Yes', 'No'])
+    if motor_impairement == 'Yes':
+        st.write("Thank you for sharing.")
+    else:
+        st.write("Thank you for your input.")
+
+    genetic_traits = st.selectbox("Do family members have similar motor skill traits?", ['Yes', 'No'])
+    if genetic_traits == 'Yes':
+        st.write("Genetics are strong!")
+    else:
+        st.write("Wow, you are unique in your family!")
+        st.markdown("---")
+    st.write("Next step, you will learn about the Motor Skills Response study...")
+    st.write("A total of 15 participants were in this study")
+    st.write("Each participant completed 40 trials using their left hand and 40 trials using their right hand.")
+    st.write("That means 80 trials per participant.")
+    total_trials = 15 * 80
+    st.write(f"In total, the dataset includes **{total_trials} trials**.")
     st.success("Thanks for being curious! 🤓")
 
 elif option == "Which statistic would you like to see?":
@@ -80,31 +117,30 @@ elif option == "Which plot would you like to see?":
     plot_type = st.selectbox("Choose a plot type:", [
         'Histogram', 'Bar Plot', 'Regression Plot'
     ])
-
-    medium_type = st.selectbox("Choose a medium:", [
-        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
-    ])
-    if medium_type == 'Right Hand':
-        medium = df.loc[df['Hand'] == 'Right', [plot_metric]]
-        color = 'red'
-    elif medium_type == 'Left Hand':
-        medium = df.loc[df['Hand'] == 'Left', [plot_metric]]
-        color = 'green'
-    elif medium_type == 'Object A':
-        medium = df.loc[df['Object'] == 'A', [plot_metric]]
-        color = 'blue'
-    elif medium_type == 'Object B':
-        medium = df.loc[df['Object'] == 'B', [plot_metric]]
-        color = 'purple'
-    elif medium_type == 'Object C':
-        medium = df.loc[df['Object'] == 'C', [plot_metric]]
-        color = 'orange'
-    elif medium_type == 'Object D':
-        medium = df.loc[df['Object'] == 'D', [plot_metric]]
-        color = 'yellow'
     
 
     if plot_type == 'Histogram':
+        medium_type = st.selectbox("Choose a medium:", [
+        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
+    ])
+        if medium_type == 'Right Hand':
+            medium = df.loc[df['Hand'] == 'Right', [plot_metric]]
+            color = 'red'
+        elif medium_type == 'Left Hand':
+            medium = df.loc[df['Hand'] == 'Left', [plot_metric]]
+            color = 'green'
+        elif medium_type == 'Object A':
+            medium = df.loc[df['Object'] == 'A', [plot_metric]]
+            color = 'blue'
+        elif medium_type == 'Object B':
+            medium = df.loc[df['Object'] == 'B', [plot_metric]]
+            color = 'purple'
+        elif medium_type == 'Object C':
+            medium = df.loc[df['Object'] == 'C', [plot_metric]]
+            color = 'orange'
+        elif medium_type == 'Object D':
+            medium = df.loc[df['Object'] == 'D', [plot_metric]]
+            color = 'yellow'
         st.write(f"Histogram for {plot_metric} for Hand")
         fig, ax = plt.subplots()
         sns.histplot(data = df, x=plot_metric, hue='Hand', ax=ax)
@@ -134,6 +170,27 @@ elif option == "Which plot would you like to see?":
     elif plot_type == 'Regression Plot':
         #lh = df[df['Hand'] == 'Left'][plot_metric].reset_index(drop=True)
         #rh = df[df['Hand'] == 'Right'][plot_metric].reset_index(drop=True)
+        medium_type = st.selectbox("Choose a medium:", [
+        'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
+    ])
+        if medium_type == 'Right Hand':
+            medium = df.loc[df['Hand'] == 'Right', [plot_metric]]
+            color = 'red'
+        elif medium_type == 'Left Hand':
+            medium = df.loc[df['Hand'] == 'Left', [plot_metric]]
+            color = 'green'
+        elif medium_type == 'Object A':
+            medium = df.loc[df['Object'] == 'A', [plot_metric]]
+            color = 'blue'
+        elif medium_type == 'Object B':
+            medium = df.loc[df['Object'] == 'B', [plot_metric]]
+            color = 'purple'
+        elif medium_type == 'Object C':
+            medium = df.loc[df['Object'] == 'C', [plot_metric]]
+            color = 'orange'
+        elif medium_type == 'Object D':
+            medium = df.loc[df['Object'] == 'D', [plot_metric]]
+            color = 'yellow'
         medium_plot1 = st.selectbox("Choose another medium:", [
         'Right Hand', 'Left Hand', 'Object A', 'Object B', 'Object C', 'Object D'
         ])
@@ -162,6 +219,11 @@ elif option == "Which plot would you like to see?":
         ax.set_title(f"Regression: {plot_metric}")
         st.pyplot(fig)
         st.info("🧠 Are we seeing any patterns here?")
+
+st.markdown("---")
+st.markdown("Do you want to explore more?")
+if st.button("Restart Analysis"):
+    st.rerun()
 
 st.markdown("---")
 st.markdown("Do you want to explore more?")
